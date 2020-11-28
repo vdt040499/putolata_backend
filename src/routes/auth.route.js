@@ -5,7 +5,6 @@ const { validateSignupRequest, validateSigninRequest, isRequestValidated } = req
 
 router.post('/signup', validateSignupRequest, isRequestValidated, signUp);
 router.post('/signin', validateSigninRequest, isRequestValidated, signIn);
-
 // router.post('/profile', requireSignin, (req, res) => {
 //     res.status(200).json({ user: 'profile'});
 // });

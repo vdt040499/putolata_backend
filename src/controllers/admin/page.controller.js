@@ -25,7 +25,5 @@ exports.createPage = (req, res) => {
         if (page) {
             return res.status(201).json({ page });
         } 
-    })
-
-    res.status(200).json({ body: req.body });
+    });
 }

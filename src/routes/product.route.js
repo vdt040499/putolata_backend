@@ -17,7 +17,7 @@ const upload = multer({ storage });
 
 const Product = require("../models/product.model");
 const { requireSignin, adminMiddleware } = require("../common-middleware");
-const { createProduct, getProductsBySlug } = require("../controllers/product.controller");
+const { createProduct, getProductsBySlug, getProductDetailsById } = require("../controllers/product.controller");
 
 router.post(
   "/product/create",
@@ -27,6 +27,7 @@ router.post(
   createProduct
 );
 router.get("/products/:slug", getProductsBySlug);
+router.get("/product/:productId", getProductDetailsById);
 // router.get('/')
 
 module.exports = router;

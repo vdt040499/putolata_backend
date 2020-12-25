@@ -37,11 +37,12 @@ exports.signUp = (req, res) => {
 };
 
 exports.signIn = (req, res) => {
-  User.findOne({ email: req.body.email }).exec((error, user) => {
+  User.findOne({ email: req.body.email }).exec(async (error, user) => {
     if (error) return res.status(400).json({ error });
 
     if (user) {
-      if (user.authenticate(req.body.password) && user.role === 'user') {
+      const isPassword = await user.authenticate(req.body.password);
+      if (isPassword && user.role === "user") {
         const token = jwt.sign(
           { _id: user._id, role: user.role },
           process.env.JWT_SECRET,
@@ -71,8 +72,8 @@ exports.signIn = (req, res) => {
 };
 
 exports.signout = (req, res) => {
-  res.clearCookie('token');
+  res.clearCookie("token");
   res.status(200).json({
-      message: 'Signout successfully!'
+    message: "Signout successfully!",
   });
-}
+};

@@ -4,7 +4,8 @@
   "description": "This is backend of ecommerce project",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./src/index.server.js"
+    "dev": "nodemon server.js",
+    "start": "node server.js"
   },
   "author": "VoTan",
   "license": "ISC",

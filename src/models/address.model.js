@@ -13,11 +13,6 @@ const addressSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  pinCode: {
-    type: String,
-    required: true,
-    trim: true,
-  },
   locality: {
     type: String,
     required: true,
@@ -36,16 +31,6 @@ const addressSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-  },
-  state: {
-    type: String,
-    required: true,
-    required: true,
-  },
-  landmark: {
-    type: String,
-    min: 10,
-    max: 100,
   },
   alternatePhone: {
     type: String,

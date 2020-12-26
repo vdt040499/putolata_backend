@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
     },
-    password: {
+    hash_password: {
       type: String,
       required: true,
     },
@@ -54,10 +54,6 @@ const userSchema = new mongoose.Schema(
 
 userSchema.virtual("fullName").get(function () {
   return `${this.firstName} ${this.lastName}`;
-});
-
-userSchema.virtual("fullName").get(function () {
-  return `${this.lastName} ${this.firstName}`;
 });
 
 userSchema.methods = {

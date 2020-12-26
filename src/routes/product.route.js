@@ -1,33 +1,44 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const multer = require("multer");
-const shortId = require("shortid");
-const path = require("path");
+const multer = require('multer');
+const shortId = require('shortid');
+const path = require('path');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(path.dirname(__dirname), "uploads"));
+    cb(null, path.join(path.dirname(__dirname), 'uploads'));
   },
   filename: function (req, file, cb) {
-    cb(null, shortId.generate() + "-" + file.originalname);
+    cb(null, shortId.generate() + '-' + file.originalname);
   },
 });
 
 const upload = multer({ storage });
 
-const Product = require("../models/product.model");
-const { requireSignin, adminMiddleware } = require("../common-middleware");
-const { createProduct, getProductsBySlug, getProductDetailsById } = require("../controllers/product.controller");
+const Product = require('../models/product.model');
+const { requireSignin, adminMiddleware } = require('../common-middleware');
+const {
+  createProduct,
+  getProductsBySlug,
+  getProductDetailsById,
+  getAllProducts,
+  getNewproducts,
+  getBestSellerProducts,
+  getOnSaleProducts,
+} = require('../controllers/product.controller');
 
 router.post(
-  "/product/create",
+  '/products/create',
   requireSignin,
   adminMiddleware,
-  upload.array("productPicture"),
+  upload.array('productPicture'),
   createProduct
 );
-router.get("/products/:slug", getProductsBySlug);
-router.get("/product/:productId", getProductDetailsById);
-// router.get('/')
+router.get('/products/:slug', getProductsBySlug);
+router.get('/products/:productId', getProductDetailsById);
+router.get('/products', getAllProducts);
+router.get('/products/newarrival', getNewproducts);
+router.get('/products/bestseller', getBestSellerProducts);
+router.get('/products/onsale', getOnSaleProducts);
 
 module.exports = router;

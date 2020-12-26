@@ -31,16 +31,7 @@ const addressSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-  },
-  alternatePhone: {
-    type: String,
-  },
-  addressType: {
-    type: String,
-    required: true,
-    enum: ["home", "work"],
-    required: true,
-  },
+  }
 });
 
 const userAddressSchema = new mongoose.Schema(

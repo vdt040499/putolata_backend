@@ -24,6 +24,11 @@ const productSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    detaildescription: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     productPictures: [{ img: { type: String } }],
     category: { type: mongoose.Schema.Types.ObjectId, ref: "Category", required: true },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },

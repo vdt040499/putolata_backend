@@ -32,16 +32,6 @@ const orderSchema = new mongoose.Schema(
         },
       },
     ],
-    paymentStatus: {
-      type: String,
-      enum: ["pending", "completed", "cancelled", "refund"],
-      required: true,
-    },
-    paymentType: {
-      type: String,
-      enum: ["cod", "card"],
-      required: true,
-    },
     orderStatus: [
       {
         type: {

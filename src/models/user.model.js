@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
     },
-    hash_password: {
+    password: {
       type: String,
       required: true,
     },
@@ -41,7 +41,6 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "admin"],
       default: "user",
     },
-    contactNumber: { type: String },
     passwordResetToken: { type: String },
     passwordResetExpires: { type: Date },
   },

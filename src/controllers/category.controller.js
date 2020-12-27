@@ -1,6 +1,7 @@
-const slugify = require('slugify');
-const Category = require('../models/category.model');
-const shortid = require('shortid');
+const slugify = require("slugify");
+const Category = require("../models/category.model");
+const Product = require("../models/product.model");
+const shortid = require("shortid");
 
 function createCategories(categories, parentId = null) {
   const categoryList = [];
@@ -66,7 +67,7 @@ module.exports.updateCategories = async (req, res) => {
         type: type[i],
       };
 
-      if (parentId[i] !== '') {
+      if (parentId[i] !== "") {
         category.parentId = parentId[i];
       }
 
@@ -84,7 +85,7 @@ module.exports.updateCategories = async (req, res) => {
       type,
     };
 
-    if (parentId !== '') {
+    if (parentId !== "") {
       category.parentId = parentId;
     }
     const updatedCategory = await Category.findOneAndUpdate({ _id }, category, {
@@ -103,8 +104,25 @@ module.exports.deleteCategories = async (req, res) => {
   }
 
   if (deletedCategories.length == ids.length) {
-    res.status(201).json({ message: 'Categories removed' });
+    res.status(201).json({ message: "Categories removed" });
   } else {
-    res.status(400).json({ message: 'Something went wrong' });
+    res.status(400).json({ message: "Something went wrong" });
   }
+};
+
+module.exports.getProductsById = (req, res) => {
+  const { categoryId } = req.params;
+  Category.findOne({ _id: categoryId }).exec((error, category) => {
+    if (error) {
+      return res.status(400).json({ error });
+    }
+    if (category) {
+      Product.find({ category: category._id }).exec((error, products) => {
+        if (error) {
+          return res.status(400).json({ error });
+        }
+        res.status(200).json({ products });
+      });
+    }
+  });
 };

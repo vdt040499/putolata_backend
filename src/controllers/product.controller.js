@@ -1,7 +1,7 @@
-const slugify = require('slugify');
+const slugify = require("slugify");
 
-const Category = require('../models/category.model');
-const Product = require('../models/product.model');
+const Category = require("../models/category.model");
+const Product = require("../models/product.model");
 
 module.exports.createProduct = (req, res) => {
   const {
@@ -19,7 +19,7 @@ module.exports.createProduct = (req, res) => {
     productPictures = req.files.map((file) => {
       return {
         img:
-          process.env.API + file.uploadcare_file_id + '/' + file.originalname,
+          process.env.API + file.uploadcare_file_id + "/" + file.originalname,
       };
     });
   }
@@ -49,7 +49,7 @@ module.exports.getProductsBySlug = (req, res) => {
   const { slug } = req.params;
   console.log(slug);
   Category.findOne({ slug: slug })
-    .select('_id type')
+    .select("_id")
     .exec((error, category) => {
       if (error) {
         return res.status(400).json({ error });
@@ -59,37 +59,27 @@ module.exports.getProductsBySlug = (req, res) => {
           if (error) {
             return res.status(400).json({ error });
           }
+          res.status(200).json({ products });
+        });
+      }
+    });
+};
 
-          if (category.type) {
-            if (products.length > 0) {
-              res.status(200).json({
-                products,
-                productsByPrice: {
-                  under5k: products.filter(
-                    (product) => product.price <= 5000000
-                  ),
-                  under10k: products.filter(
-                    (product) =>
-                      product.price > 5000000 && product.price <= 10000000
-                  ),
-                  under15k: products.filter(
-                    (product) =>
-                      product.price > 10000000 && product.price <= 15000000
-                  ),
-                  under20k: products.filter(
-                    (product) =>
-                      product.price > 15000000 && product.price <= 20000000
-                  ),
-                  under30k: products.filter(
-                    (product) =>
-                      product.price > 20000000 && product.price <= 30000000
-                  ),
-                },
-              });
-            }
-          } else {
-            res.status(200).json({ products });
+module.exports.getProductsBySlug = (req, res) => {
+  const { slug } = req.params;
+  console.log(slug);
+  Category.findOne({ slug: slug })
+    .select("_id type")
+    .exec((error, category) => {
+      if (error) {
+        return res.status(400).json({ error });
+      }
+      if (category) {
+        Product.find({ category: category._id }).exec((error, products) => {
+          if (error) {
+            return res.status(400).json({ error });
           }
+          res.status(200).json({ products });
         });
       }
     });
@@ -107,7 +97,7 @@ module.exports.getProductDetailsById = (req, res) => {
       }
     });
   } else {
-    return res.status(400).json({ error: 'Params required' });
+    return res.status(400).json({ error: "Params required" });
   }
 };
 
@@ -115,7 +105,7 @@ module.exports.getAllProducts = (req, res) => {
   Product.find()
     .then((products) => {
       return res.status(200).json({
-        message: 'Success.',
+        message: "Success.",
         products: products,
       });
     })
@@ -132,7 +122,7 @@ module.exports.getNewProducts = (req, res) => {
     .limit(8)
     .then((products) => {
       return res.status(200).json({
-        message: 'Success.',
+        message: "Success.",
         products: products,
       });
     })
@@ -149,7 +139,7 @@ module.exports.getBestSellerProducts = (req, res) => {
     .limit(8)
     .then((products) => {
       return res.status(200).json({
-        message: 'Success.',
+        message: "Success.",
         products: products,
       });
     })
@@ -166,7 +156,7 @@ module.exports.getOnSaleProducts = (req, res) => {
     .limit(8)
     .then((products) => {
       return res.status(200).json({
-        message: 'Success.',
+        message: "Success.",
         products: products,
       });
     })

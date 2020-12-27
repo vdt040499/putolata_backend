@@ -4,7 +4,14 @@ const Category = require('../models/category.model');
 const Product = require('../models/product.model');
 
 module.exports.createProduct = (req, res) => {
-  const { name, price, description, quantity, category } = req.body;
+  const {
+    name,
+    price,
+    description,
+    detailDescription,
+    quantity,
+    category,
+  } = req.body;
 
   let productPictures = [];
 
@@ -23,6 +30,7 @@ module.exports.createProduct = (req, res) => {
     price,
     quantity,
     description,
+    detailDescription,
     productPictures,
     category,
     createdBy: req.user._id,
@@ -89,7 +97,7 @@ module.exports.getProductsBySlug = (req, res) => {
 
 module.exports.getProductDetailsById = (req, res) => {
   const { productId } = req.params;
-  
+
   if (productId) {
     Product.findOne({ _id: productId }).exec((error, product) => {
       if (error) return res.status(400).json({ error });

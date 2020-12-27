@@ -3,12 +3,14 @@ const uploadcareStorage = require('multer-storage-uploadcare');
 const multer = require('multer');
 
 const storage = uploadcareStorage({
-  public_key: process.env.UPLOADCARE_PUBLIC_KEY,
+  public_key: '1b2d73fa8bc2eee9921d',
   private_key: process.env.UPLOADCARE_PRIVATE_KEY,
   store: 'auto',
 });
 
-module.exports.upload = multer({ storage });
+module.exports.upload = multer({
+  storage: storage,
+});
 
 module.exports.requireSignin = (req, res, next) => {
   if (req.headers.authorization) {

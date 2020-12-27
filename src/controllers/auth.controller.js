@@ -90,6 +90,7 @@ exports.signout = (req, res) => {
 };
 
 exports.forgotPassword = (req, res) => {
+  console.log(req.body.email);
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {

@@ -37,8 +37,8 @@ router.post(
 router.get("/products/newarrival", getNewProducts);
 router.get("/products/bestseller", getBestSellerProducts);
 router.get("/products/onsale", getOnSaleProducts);
-router.get("/products/:productId", getProductDetailsById);
 router.get("/products/:slug", getProductsBySlug);
+router.get("/product/:productId", getProductDetailsById);
 router.get("/products", getAllProducts);
 
 module.exports = router;

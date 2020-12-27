@@ -9,6 +9,7 @@ const morgan = require('morgan');
 //routes
 const authRoutes = require('./routes/auth.route');
 const adminRoutes = require('./routes/admin/auth.route');
+const userRoutes = require('./routes/user.route');
 const categoryRoutes = require('./routes/category.route');
 const productRoutes = require('./routes/product.route');
 const cartRoutes = require('./routes/cart.route');
@@ -44,6 +45,7 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use('/api', authRoutes);
 app.use('/api', adminRoutes);
+app.use('/api', userRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', productRoutes);
 app.use('/api', cartRoutes);

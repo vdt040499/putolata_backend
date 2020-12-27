@@ -1,8 +1,8 @@
-const shortId = require("shortid");
-const slugify = require("slugify");
+const shortId = require('shortid');
+const slugify = require('slugify');
 
-const Category = require("../models/category.model");
-const Product = require("../models/product.model");
+const Category = require('../models/category.model');
+const Product = require('../models/product.model');
 
 exports.createProduct = (req, res) => {
   const { name, price, description, quantity, category } = req.body;
@@ -39,7 +39,7 @@ exports.getProductsBySlug = (req, res) => {
   const { slug } = req.params;
   console.log(slug);
   Category.findOne({ slug: slug })
-    .select("_id type")
+    .select('_id type')
     .exec((error, category) => {
       if (error) {
         return res.status(400).json({ error });
@@ -95,7 +95,7 @@ exports.getProductDetailsById = (req, res) => {
       }
     });
   } else {
-    return res.status(400).json({ error: "Params required" });
+    return res.status(400).json({ error: 'Params required' });
   }
 };
 
@@ -103,7 +103,7 @@ exports.getAllProducts = (req, res) => {
   Product.find()
     .then((products) => {
       return res.status(200).json({
-        message: "Success.",
+        message: 'Success.',
         products: products,
       });
     })
@@ -120,7 +120,7 @@ exports.getNewProducts = (req, res) => {
     .limit(8)
     .then((products) => {
       return res.status(200).json({
-        message: "Success.",
+        message: 'Success.',
         products: products,
       });
     })
@@ -137,7 +137,7 @@ exports.getBestSellerProducts = (req, res) => {
     .limit(8)
     .then((products) => {
       return res.status(200).json({
-        message: "Success.",
+        message: 'Success.',
         products: products,
       });
     })
@@ -154,7 +154,7 @@ exports.getOnSaleProducts = (req, res) => {
     .limit(8)
     .then((products) => {
       return res.status(200).json({
-        message: "Success.",
+        message: 'Success.',
         products: products,
       });
     })

@@ -30,6 +30,7 @@ router.post(
   isRequestValidated,
   resetPassword
 );
+
 // router.post('/profile', requireSignin, (req, res) => {
 //     res.status(200).json({ user: 'profile'});
 // });

@@ -1,38 +1,33 @@
 const express = require('express');
 const router = express.Router();
-const {
-  signUp,
-  signIn,
-  signout,
-  forgotPassword,
-  resetPassword,
-} = require('../controllers/auth.controller');
-const {
-  validateSignupRequest,
-  validateSigninRequest,
-  isRequestValidated,
-  validateForgotPassword,
-  validateResetPassword,
-} = require('../validators/auth.validator');
 
-router.post('/signup', validateSignupRequest, isRequestValidated, signUp);
-router.post('/signin', validateSigninRequest, isRequestValidated, signIn);
-router.post('/signout', signout);
+const validator = require('../validators/auth.validator');
+const authController = require('../controllers/auth.controller');
+
+router.post(
+  '/signup',
+  validator.validateSignupRequest,
+  validator.isRequestValidated,
+  authController.signUp
+);
+router.post(
+  '/signin',
+  validator.validateSigninRequest,
+  validator.isRequestValidated,
+  authController.signIn
+);
+router.post('/signout', authController.signout);
 router.post(
   '/forgotpassword',
-  validateForgotPassword,
-  isRequestValidated,
-  forgotPassword
+  validator.validateForgotPassword,
+  validator.isRequestValidated,
+  authController.forgotPassword
 );
 router.post(
   '/resetpassword',
-  validateResetPassword,
-  isRequestValidated,
-  resetPassword
+  validator.validateResetPassword,
+  validator.isRequestValidated,
+  authController.resetPassword
 );
-
-// router.post('/profile', requireSignin, (req, res) => {
-//     res.status(200).json({ user: 'profile'});
-// });
 
 module.exports = router;

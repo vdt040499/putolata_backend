@@ -1,41 +1,36 @@
-const jwt  = require('jsonwebtoken');
-const multer = require("multer");
-const shortId = require("shortid");
-const path = require("path");
+const jwt = require('jsonwebtoken');
+const uploadcareStorage = require('multer-storage-uploadcare');
+const multer = require('multer');
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(path.dirname(__dirname), "uploads"));
-  },
-  filename: function (req, file, cb) {
-    cb(null, shortId.generate() + "-" + file.originalname);
-  },
+const storage = uploadcareStorage({
+  public_key: process.env.UPLOADCARE_PUBLIC_KEY,
+  private_key: process.env.UPLOADCARE_PRIVATE_KEY,
+  store: 'auto',
 });
 
-exports.upload = multer({ storage });
+module.exports.upload = multer({ storage });
 
-exports.requireSignin = (req, res, next) => {
-    
-    if (req.headers.authorization) {
-        const token = req.headers.authorization.split(" ")[1];
-        const user = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = user;
-    } else {
-        return res.status(400).json({ message: 'Authorization required'})
-    }
-    next();
-}
+module.exports.requireSignin = (req, res, next) => {
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split(' ')[1];
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = user;
+  } else {
+    return res.status(400).json({ message: 'Authorization required' });
+  }
+  next();
+};
 
-exports.userMiddleware = (req, res, next) => {
-    if (req.user.role !== 'user') {
-        return res.status(400).json({ message: 'User access denied' })
-    }
-    next();
-}
+module.exports.userMiddleware = (req, res, next) => {
+  if (req.user.role !== 'user') {
+    return res.status(400).json({ message: 'User access denied' });
+  }
+  next();
+};
 
-exports.adminMiddleware = (req, res, next) => {
-    if (req.user.role !== 'admin') {
-        return res.status(400).json({ message: 'Admin access denied' })
-    }
-    next();
-}
+module.exports.adminMiddleware = (req, res, next) => {
+  if (req.user.role !== 'admin') {
+    return res.status(400).json({ message: 'Admin access denied' });
+  }
+  next();
+};

@@ -1,4 +1,4 @@
-const Cart = require("../models/cart.model");
+const Cart = require('../models/cart.model');
 
 function runUpdate(condition, updateData) {
   return new Promise((resolve, reject) => {
@@ -10,7 +10,7 @@ function runUpdate(condition, updateData) {
   });
 }
 
-exports.addItemToCart = (req, res) => {
+module.exports.addItemToCart = (req, res) => {
   Cart.findOne({ user: req.user._id }).exec((error, cart) => {
     if (error) return res.status(400).json({ error });
     if (cart) {
@@ -22,10 +22,10 @@ exports.addItemToCart = (req, res) => {
         const item = cart.cartItems.find((c) => c.product == product);
         let condition, update;
         if (item) {
-          condition = { user: req.user._id, "cartItems.product": product };
+          condition = { user: req.user._id, 'cartItems.product': product };
           update = {
             $set: {
-              "cartItems.$": cartItem,
+              'cartItems.$': cartItem,
             },
           };
         } else {
@@ -86,11 +86,11 @@ exports.addItemToCart = (req, res) => {
 //     }
 // }
 
-exports.getCartItems = (req, res) => {
+module.exports.getCartItems = (req, res) => {
   //const { user } = req.body.payload;
   //if(user){
   Cart.findOne({ user: req.user._id })
-    .populate("cartItems.product", "_id name price productPictures")
+    .populate('cartItems.product', '_id name price productPictures')
     .exec((error, cart) => {
       if (error) return res.status(400).json({ error });
       if (cart) {
@@ -110,7 +110,7 @@ exports.getCartItems = (req, res) => {
   //}
 };
 
-exports.removeCartItems = (req, res) => {
+module.exports.removeCartItems = (req, res) => {
   const { productId } = req.body.payload;
   if (productId) {
     Cart.update(

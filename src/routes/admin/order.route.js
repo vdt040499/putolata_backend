@@ -1,17 +1,20 @@
-const express = require("express");
-const { requireSignin, adminMiddleware } = require("../../common-middleware");
-const {
-  updateOrder,
-  getCustomerOrders,
-} = require("../../controllers/admin/order.controller");
+const express = require('express');
 const router = express.Router();
 
-router.post(`/order/update`, requireSignin, adminMiddleware, updateOrder);
+const middleware = require('../../common-middleware');
+const adminOrderController = require('../../controllers/admin/order.controller');
+
 router.post(
-  `/order/getCustomerOrders`,
-  requireSignin,
-  adminMiddleware,
-  getCustomerOrders
+  '/order/update',
+  middleware.requireSignin,
+  middleware.adminMiddleware,
+  adminOrderController.updateOrder
+);
+router.post(
+  '/order/getCustomerOrders',
+  middleware.requireSignin,
+  middleware.adminMiddleware,
+  adminOrderController.getCustomerOrders
 );
 
 module.exports = router;

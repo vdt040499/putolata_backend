@@ -1,32 +1,25 @@
 const express = require('express');
 const router = express.Router();
 
-const {
-  validateUpdateRequest,
-  isRequestValidated,
-} = require('../validators/auth.validator');
-const {
-  requireSignin,
-  userMiddleware,
-  adminMiddleware,
-} = require('../common-middleware');
+const validator = require('../validators/auth.validator');
+const middleware = require('../common-middleware');
 const userController = require('../controllers/user.controller');
 
 router.patch(
   '/user',
-  validateUpdateRequest,
-  isRequestValidated,
-  requireSignin,
-  userMiddleware,
+  validator.validateUpdateRequest,
+  validator.isRequestValidated,
+  middleware.requireSignin,
+  middleware.userMiddleware,
   userController.updateUser
 );
 
 router.patch(
   '/admin',
-  validateUpdateRequest,
-  isRequestValidated,
-  requireSignin,
-  adminMiddleware,
+  validator.validateUpdateRequest,
+  validator.isRequestValidated,
+  middleware.requireSignin,
+  middleware.adminMiddleware,
   userController.updateUser
 );
 

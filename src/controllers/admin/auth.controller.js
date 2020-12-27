@@ -1,13 +1,14 @@
-const User = require("../../models/user.model");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const shortid = require("shortid");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const shortid = require('shortid');
 
-exports.signUp = (req, res) => {
+const User = require('../../models/user.model');
+
+module.exports.signUp = (req, res) => {
   User.findOne({ email: req.body.email }).exec(async (error, user) => {
     if (user)
       return res.status(400).json({
-        message: "Admin already registered",
+        message: 'Admin already registered',
       });
 
     const { firstName, lastName, email, password } = req.body;
@@ -19,38 +20,47 @@ exports.signUp = (req, res) => {
       email,
       hash_password,
       username: shortid.generate(),
-      role: "admin",
+      role: 'admin',
     });
 
     _user.save((error, data) => {
       if (error) {
         return res.status(400).json({
-          message: "Something went wrong",
+          message: 'Something went wrong',
         });
       }
 
       if (data) {
         return res.status(201).json({
-          message: "Admin created successfully",
+          message: 'Admin created successfully',
         });
       }
     });
   });
 };
 
-exports.signIn = (req, res) => {
+module.exports.signIn = (req, res) => {
   User.findOne({ email: req.body.email }).exec(async (error, user) => {
     if (error) return res.status(400).json({ error });
+
     if (user) {
-        const isPassword = await user.authenticate(req.body.password);
-      if (isPassword && user.role === "admin") {
+      const isPassword = await user.authenticate(req.body.password);
+
+      if (isPassword && user.role === 'admin') {
         const token = jwt.sign(
           { _id: user._id, role: user.role },
           process.env.JWT_SECRET,
-          { expiresIn: "1d" }
+          {
+            expiresIn: process.env.JWT_EXPIRES_IN,
+          }
         );
+
         const { _id, firstName, lastName, email, role, fullName } = user;
-        res.cookie("token", token, { expiresIn: "1d" });
+
+        res.cookie('token', token, {
+          expiresIn: process.env.JWT_EXPIRES_IN,
+        });
+
         res.status(200).json({
           token,
           user: {
@@ -64,18 +74,18 @@ exports.signIn = (req, res) => {
         });
       } else {
         return res.status(400).json({
-          message: "Invalid password",
+          message: 'Invalid password',
         });
       }
     } else {
-      return res.status(400).json({ message: "Something went wrong" });
+      return res.status(400).json({ message: 'Something went wrong' });
     }
   });
 };
 
-exports.signout = (req, res) => {
-  res.clearCookie("token");
+module.exports.signout = (req, res) => {
+  res.clearCookie('token');
   res.status(200).json({
-    message: "Signout successfully!",
+    message: 'Signout successfully!',
   });
 };

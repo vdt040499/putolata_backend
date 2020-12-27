@@ -1,44 +1,21 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const multer = require("multer");
-const shortId = require("shortid");
-const path = require("path");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(path.dirname(__dirname), "uploads"));
-  },
-  filename: function (req, file, cb) {
-    cb(null, shortId.generate() + "-" + file.originalname);
-  },
-});
-
-const upload = multer({ storage });
-
-const Product = require("../models/product.model");
-const { requireSignin, adminMiddleware } = require("../common-middleware");
-const {
-  createProduct,
-  getProductsBySlug,
-  getProductDetailsById,
-  getAllProducts,
-  getNewProducts,
-  getBestSellerProducts,
-  getOnSaleProducts,
-} = require("../controllers/product.controller");
+const middleware = require('../common-middleware');
+const productController = require('../controllers/product.controller');
 
 router.post(
-  "/products/create",
-  requireSignin,
-  adminMiddleware,
-  upload.array("productPicture"),
-  createProduct
+  '/products/create',
+  middleware.requireSignin,
+  middleware.adminMiddleware,
+  middleware.upload.array('productPicture'),
+  productController.createProduct
 );
-router.get("/products/newarrival", getNewProducts);
-router.get("/products/bestseller", getBestSellerProducts);
-router.get("/products/onsale", getOnSaleProducts);
-router.get("/products/:slug", getProductsBySlug);
-router.get("/product/:productId", getProductDetailsById);
-router.get("/products", getAllProducts);
+router.get('/products/newarrival', productController.getNewProducts);
+router.get('/products/bestseller', productController.getBestSellerProducts);
+router.get('/products/onsale', productController.getOnSaleProducts);
+router.get('/products/:slug', productController.getProductsBySlug);
+router.get('/product/:productId', productController.getProductDetailsById);
+router.get('/products', productController.getAllProducts);
 
 module.exports = router;

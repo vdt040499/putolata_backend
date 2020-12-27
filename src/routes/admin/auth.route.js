@@ -1,39 +1,36 @@
 const express = require('express');
-const { requireSignin } = require('../../common-middleware');
 const router = express.Router();
-const {
-  signUp,
-  signIn,
-  signout,
-} = require('../../controllers/admin/auth.controller');
-const {
-  forgotPassword,
-  resetPassword,
-} = require('../../controllers/auth.controller');
-const {
-  validateSigninRequest,
-  isRequestValidated,
-  validateSignupRequest,
-  validateForgotPassword,
-  validateResetPassword,
-} = require('../../validators/auth.validator');
 
-router.post('/admin/signin', validateSigninRequest, isRequestValidated, signIn);
-router.post('/admin/signup', validateSignupRequest, isRequestValidated, signUp);
-router.post('/admin/signout', signout);
+const validator = require('../../validators/auth.validator');
+const adminAuthController = require('../../controllers/admin/auth.controller');
+const authController = require('../../controllers/auth.controller');
+
+router.post(
+  '/admin/signin',
+  validator.validateSigninRequest,
+  validator.isRequestValidated,
+  adminAuthController.signIn
+);
+router.post(
+  '/admin/signup',
+  validator.validateSignupRequest,
+  validator.isRequestValidated,
+  adminAuthController.signUp
+);
+router.post('/admin/signout', adminAuthController.signout);
 
 router.post(
   '/admin/forgotpassword',
-  validateForgotPassword,
-  isRequestValidated,
-  forgotPassword
+  validator.validateForgotPassword,
+  validator.isRequestValidated,
+  authController.forgotPassword
 );
 
 router.post(
   '/admin/resetpassword',
-  validateResetPassword,
-  isRequestValidated,
-  resetPassword
+  validator.validateResetPassword,
+  validator.isRequestValidated,
+  authController.resetPassword
 );
 
 module.exports = router;

@@ -1,17 +1,19 @@
-const shortId = require('shortid');
 const slugify = require('slugify');
 
 const Category = require('../models/category.model');
 const Product = require('../models/product.model');
 
-exports.createProduct = (req, res) => {
+module.exports.createProduct = (req, res) => {
   const { name, price, description, quantity, category } = req.body;
 
   let productPictures = [];
 
   if (req.files.length > 0) {
     productPictures = req.files.map((file) => {
-      return { img: file.filename };
+      return {
+        img:
+          process.env.API + file.uploadcare_file_id + '/' + file.originalname,
+      };
     });
   }
 
@@ -35,7 +37,7 @@ exports.createProduct = (req, res) => {
   });
 };
 
-exports.getProductsBySlug = (req, res) => {
+module.exports.getProductsBySlug = (req, res) => {
   const { slug } = req.params;
   console.log(slug);
   Category.findOne({ slug: slug })
@@ -85,11 +87,13 @@ exports.getProductsBySlug = (req, res) => {
     });
 };
 
-exports.getProductDetailsById = (req, res) => {
+module.exports.getProductDetailsById = (req, res) => {
   const { productId } = req.params;
+  
   if (productId) {
     Product.findOne({ _id: productId }).exec((error, product) => {
       if (error) return res.status(400).json({ error });
+
       if (product) {
         res.status(200).json({ product });
       }
@@ -99,7 +103,7 @@ exports.getProductDetailsById = (req, res) => {
   }
 };
 
-exports.getAllProducts = (req, res) => {
+module.exports.getAllProducts = (req, res) => {
   Product.find()
     .then((products) => {
       return res.status(200).json({
@@ -114,7 +118,7 @@ exports.getAllProducts = (req, res) => {
     });
 };
 
-exports.getNewProducts = (req, res) => {
+module.exports.getNewProducts = (req, res) => {
   Product.find()
     .sort({ _id: -1 })
     .limit(8)
@@ -131,7 +135,7 @@ exports.getNewProducts = (req, res) => {
     });
 };
 
-exports.getBestSellerProducts = (req, res) => {
+module.exports.getBestSellerProducts = (req, res) => {
   Product.find()
     .sort({ sold: -1 })
     .limit(8)
@@ -148,7 +152,7 @@ exports.getBestSellerProducts = (req, res) => {
     });
 };
 
-exports.getOnSaleProducts = (req, res) => {
+module.exports.getOnSaleProducts = (req, res) => {
   Product.find()
     .sort({ discount: -1 })
     .limit(8)

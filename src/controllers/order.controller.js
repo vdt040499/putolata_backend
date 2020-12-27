@@ -1,34 +1,38 @@
-const Order = require("../models/order.model");
-const Cart = require("../models/cart.model");
-const Address = require("../models/address.model");
+const Order = require('../models/order.model');
+const Cart = require('../models/cart.model');
+const Address = require('../models/address.model');
 
-exports.addOrder = (req, res) => {
+module.exports.addOrder = (req, res) => {
   Cart.deleteOne({ user: req.user._id }).exec((error, result) => {
     if (error) return res.status(400).json({ error });
+
     if (result) {
       req.body.user = req.user._id;
       req.body.orderStatus = [
         {
-          type: "ordered",
+          type: 'ordered',
           date: new Date(),
           isCompleted: true,
         },
         {
-          type: "packed",
+          type: 'packed',
           isCompleted: false,
         },
         {
-          type: "shipped",
+          type: 'shipped',
           isCompleted: false,
         },
         {
-          type: "delivered",
+          type: 'delivered',
           isCompleted: false,
         },
       ];
+
       const order = new Order(req.body);
+
       order.save((error, order) => {
         if (error) return res.status(400).json({ error });
+
         if (order) {
           res.status(201).json({ order });
         }
@@ -37,10 +41,10 @@ exports.addOrder = (req, res) => {
   });
 };
 
-exports.getOrders = (req, res) => {
+module.exports.getOrders = (req, res) => {
   Order.find({ user: req.user._id })
-    .select("_id paymentStatus items")
-    .populate("items.productId", "_id name productPictures")
+    .select('_id paymentStatus items')
+    .populate('items.productId', '_id name productPictures')
     .exec((error, orders) => {
       if (error) return res.status(400).json({ error });
       if (orders) {
@@ -49,12 +53,13 @@ exports.getOrders = (req, res) => {
     });
 };
 
-exports.getOrder = (req, res) => {
+module.exports.getOrder = (req, res) => {
   Order.findOne({ _id: req.body.orderId })
-    .populate("items.productId", "_id name productPictures")
+    .populate('items.productId', '_id name productPictures')
     .lean()
     .exec((error, order) => {
       if (error) return res.status(400).json({ error });
+
       if (order) {
         Address.findOne({
           user: req.user._id,

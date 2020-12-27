@@ -1,27 +1,26 @@
-const express = require("express");
-const {
-  addItemToCart,
-  addToCart,
-  getCartItems,
-  removeCartItems,
-} = require("../controllers/cart.controller");
-const { requireSignin, userMiddleware } = require("../common-middleware");
+const express = require('express');
 const router = express.Router();
 
+const middleware = require('../common-middleware');
+const cartController = require('../controllers/cart.controller');
+
 router.post(
-  "/user/cart/addtocart",
-  requireSignin,
-  userMiddleware,
-  addItemToCart
+  '/user/cart/addtocart',
+  middleware.requireSignin,
+  middleware.userMiddleware,
+  cartController.addItemToCart
 );
-//router.post('/user/cart/addToCartByLogin', requireSignin, userMiddleware, addToCart);
-router.post("/user/getCartItems", requireSignin, userMiddleware, getCartItems);
-//new update
 router.post(
-  "/user/cart/removeItem",
-  requireSignin,
-  userMiddleware,
-  removeCartItems
+  '/user/getCartItems',
+  middleware.requireSignin,
+  middleware.userMiddleware,
+  cartController.getCartItems
+);
+router.post(
+  '/user/cart/removeItem',
+  middleware.requireSignin,
+  middleware.userMiddleware,
+  cartController.removeCartItems
 );
 
 module.exports = router;

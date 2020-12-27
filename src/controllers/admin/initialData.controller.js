@@ -1,10 +1,11 @@
-const Category = require("../../models/category.model");
-const Product = require("../../models/product.model");
-const Order = require("../../models/order.model");
+const Category = require('../../models/category.model');
+const Product = require('../../models/product.model');
+const Order = require('../../models/order.model');
 
 function createCategories(categories, parentId = null) {
   const categoryList = [];
   let category;
+
   if (parentId == null) {
     category = categories.filter((cat) => cat.parentId == undefined);
   } else {
@@ -25,15 +26,18 @@ function createCategories(categories, parentId = null) {
   return categoryList;
 }
 
-exports.initialData = async (req, res) => {
+module.exports.initialData = async (req, res) => {
   const categories = await Category.find({}).exec();
+
   const products = await Product.find({})
-    .select("_id name price quantity slug description productPictures category")
-    .populate({ path: "category", select: "_id name" })
+    .select('_id name price quantity slug description productPictures category')
+    .populate({ path: 'category', select: '_id name' })
     .exec();
+
   const orders = await Order.find({})
-    .populate("items.productId", "name")
+    .populate('items.productId', 'name')
     .exec();
+
   res.status(200).json({
     categories: createCategories(categories),
     products,

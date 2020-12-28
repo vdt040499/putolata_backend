@@ -27,6 +27,7 @@ function createCategories(categories, parentId = null) {
 }
 
 module.exports.addCategory = (req, res) => {
+  console.log(req.body.name);
   const categoryObj = {
     name: req.body.name,
     slug: `${slugify(req.body.name)}-${shortid.generate()}`,
@@ -58,13 +59,13 @@ module.exports.getCategories = (req, res) => {
 };
 
 module.exports.updateCategories = async (req, res) => {
-  const { _id, name, parentId, type } = req.body;
+  console.log(req.body);
+  const { _id, name, parentId } = req.body;
   const updatedCategories = [];
   if (name instanceof Array) {
     for (let i = 0; i < name.length; i++) {
       const category = {
         name: name[i],
-        type: type[i],
       };
 
       if (parentId[i] !== "") {
@@ -82,7 +83,6 @@ module.exports.updateCategories = async (req, res) => {
   } else {
     const category = {
       name,
-      type,
     };
 
     if (parentId !== "") {
